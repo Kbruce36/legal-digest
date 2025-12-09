@@ -221,7 +221,7 @@
       <a href="{% url 'legal_digest_app:dashboard' %}" class="btn btn-primary">Go to Dashboard</a>
       <a href="{% url 'legal_digest_app:logout' %}" class="btn btn-secondary">Logout</a>
     {% else %}
-      <a href="#cases" class="btn btn-primary">Browse Case Summaries</a>
+      <a href="{% url 'legal_digest_app:public_cases_list' %}" class="btn btn-primary">Browse Case Summaries</a>
       <a href="#about" class="btn btn-secondary">Learn More</a>
     {% endif %}
   </div>
@@ -277,8 +277,8 @@
   
   <div class="stats-grid">
     <div class="stat-item">
-      <span class="stat-number">📖</span>
-      <span class="stat-label">Expert Analysis</span>
+      <span class="stat-number">{{ published_count }}</span>
+      <span class="stat-label">Case{% if published_count != 1 %}s{% endif %} Published</span>
     </div>
     <div class="stat-item">
       <span class="stat-number">⚡</span>
@@ -293,6 +293,43 @@
       <span class="stat-label">Free Access</span>
     </div>
   </div>
+  
+  {% if recent_cases %}
+  <div class="mt-5">
+    <h3 class="text-center mb-4">Recent Case Summaries</h3>
+    <div class="row g-4 justify-content-center">
+      {% for case in recent_cases %}
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">
+              <a href="{% url 'legal_digest_app:public_case_detail' case.slug %}" class="text-decoration-none">
+                {{ case.title }}
+              </a>
+            </h5>
+            {% if case.citation %}
+            <p class="text-muted small mb-2">{{ case.citation }}</p>
+            {% endif %}
+            {% if case.summary_short %}
+            <p class="card-text text-muted">{{ case.summary_short|truncatewords:20 }}</p>
+            {% elif case.summary_long %}
+            <p class="card-text text-muted">{{ case.summary_long|truncatewords:20 }}</p>
+            {% endif %}
+            <a href="{% url 'legal_digest_app:public_case_detail' case.slug %}" class="btn btn-sm btn-outline-primary mt-2">
+              Read More <i class="bi bi-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="text-center mt-4">
+      <a href="{% url 'legal_digest_app:public_cases_list' %}" class="btn btn-primary">
+        View All Case Summaries
+      </a>
+    </div>
+  </div>
+  {% endif %}
 </section>
 {% endblock %}
 

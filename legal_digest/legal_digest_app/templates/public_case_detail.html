@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ case.title }} - {{ site_name }}{% endblock %}
+
+{% block meta_description %}{% if case.summary_short %}{{ case.summary_short|striptags }}{% elif case.summary_long %}{{ case.summary_long|truncatewords:30|striptags }}{% endif %}{% endblock %}
+
+{% block extra_head %}
+<meta property="og:type" content="article" />
+<meta property="og:title" content="{{ case.title }}" />
+<meta property="og:description" content="{% if case.summary_short %}{{ case.summary_short|striptags }}{% elif case.summary_long %}{{ case.summary_long|truncatewords:30|striptags }}{% endif %}" />
+<meta property="article:published_time" content="{{ case.created_at|date:'c' }}" />
+<meta property="article:modified_time" content="{{ case.updated_at|date:'c' }}" />
+{% for tag in case.tags.all %}
+<meta property="article:tag" content="{{ tag.name }}" />
+{% endfor %}
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="{{ case.title }}" />
+<meta name="twitter:description" content="{% if case.summary_short %}{{ case.summary_short|striptags }}{% elif case.summary_long %}{{ case.summary_long|truncatewords:30|striptags }}{% endif %}" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LegalCase",
+  "name": "{{ case.title }}",
+  "description": "{% if case.summary_short %}{{ case.summary_short|striptags }}{% elif case.summary_long %}{{ case.summary_long|truncatewords:50|striptags }}{% endif %}",
+  {% if case.citation %}"citation": "{{ case.citation }}",{% endif %}
+  {% if case.court %}"court": "{{ case.court }}",{% endif %}
+  {% if case.decision_date %}"datePublished": "{{ case.decision_date|date:'Y-m-d' }}",{% endif %}
+  "dateCreated": "{{ case.created_at|date:'Y-m-d' }}",
+  "dateModified": "{{ case.updated_at|date:'Y-m-d' }}"
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="section">
+    <p class="muted">
+        <a href="{% url 'legal_digest_app:index' %}">Home</a> / 
+        <a href="{% url 'legal_digest_app:public_cases_list' %}">Case Summaries</a> / 
+        {{ case.title|truncatewords:5 }}
+    </p>
+</div>
+
+<div class="section">
+    <h1>{{ case.title }}</h1>
+    
+    <div class="action-row">
+        {% if case.citation %}
+        <span class="badge badge-primary">{{ case.citation }}</span>
+        {% endif %}
+        
+        {% if case.court %}
+        <span class="badge badge-secondary">{{ case.court }}</span>
+        {% endif %}
+        
+        {% if case.decision_date %}
+        <span class="muted">{{ case.decision_date|date:"M d, Y" }}</span>
+        {% endif %}
+        
+        <span class="muted">Updated {{ case.updated_at|date:"M d, Y" }}</span>
+    </div>
+
+    {% if case.tags.all %}
+    <div class="action-row">
+        <strong class="muted">Topics:</strong>
+        {% for tag in case.tags.all %}
+        <a href="{% url 'legal_digest_app:public_cases_list' %}?tag={{ tag.id }}" class="badge badge-primary">{{ tag.name }}</a>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+<div class="grid">
+    <div>
+        {% if case.parties %}
+        <div class="card section">
+            <h3>Parties</h3>
+            <p>{{ case.parties|linebreaks }}</p>
+        </div>
+        {% endif %}
+
+        {% if case.summary_short %}
+        <div class="card section">
+            <h3>Brief Summary</h3>
+            <div>{{ case.summary_short|linebreaks }}</div>
+        </div>
+        {% endif %}
+
+        {% if case.summary_long %}
+        <div class="card section">
+            <h3>Full Case Summary</h3>
+            <div>{{ case.summary_long|linebreaks }}</div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div>
+        <div class="card section">
+            <h3>Case Information</h3>
+            
+            {% if case.docket_number %}
+            <div class="section">
+                <strong>Docket Number:</strong><br>
+                <span class="muted">{{ case.docket_number }}</span>
+            </div>
+            {% endif %}
+
+            {% if case.jurisdiction %}
+            <div class="section">
+                <strong>Jurisdiction:</strong><br>
+                <span class="muted">{{ case.jurisdiction }}</span>
+            </div>
+            {% endif %}
+
+            {% if case.status %}
+            <div class="section">
+                <strong>Status:</strong><br>
+                <span class="badge badge-{{ case.status }}">{{ case.get_status_display }}</span>
+            </div>
+            {% endif %}
+
+            <div>
+                <strong>Published:</strong><br>
+                <span class="muted">{{ case.created_at|date:"M d, Y" }}</span>
+            </div>
+        </div>
+
+        {% if related_cases %}
+        <div class="card section">
+            <h3>Related Cases</h3>
+            {% for related in related_cases %}
+            <div class="section border-top">
+                <a href="{% url 'legal_digest_app:public_case_detail' related.slug %}">{{ related.title|truncatewords:8 }}</a>
+                {% if related.citation %}
+                <p class="muted">{{ related.citation }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="section">
+    <a href="{% url 'legal_digest_app:public_cases_list' %}" class="btn btn-outline">← Back to All Cases</a>
+</div>
+{% endblock %}

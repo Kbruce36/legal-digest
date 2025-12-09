@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Case Summaries - {{ site_name }}{% endblock %}
+
+{% block meta_description %}Browse expert legal case summaries and analysis. Find court decisions, case law, and legal precedents.{% endblock %}
+
+{% block extra_head %}
+<meta property="og:title" content="Case Summaries - {{ site_name }}" />
+<meta property="og:description" content="Browse expert legal case summaries and analysis. Find court decisions, case law, and legal precedents." />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Case Summaries - {{ site_name }}" />
+<meta name="twitter:description" content="Browse expert legal case summaries and analysis." />
+{% endblock %}
+
+{% block content %}
+<div class="section">
+    <h1>Case Summaries</h1>
+    <p class="muted">Expert analysis of important legal decisions</p>
+</div>
+
+<div class="section">
+    <div class="filter-bar">
+        <form method="get" action="{% url 'legal_digest_app:public_cases_list' %}">
+            <div class="filter-row">
+                <div class="control">
+                    <label for="search">Search</label>
+                    <input type="text" 
+                           class="input-control" 
+                           id="search" 
+                           name="search" 
+                           placeholder="Title, citation, parties..." 
+                           value="{{ search }}">
+                </div>
+
+                <div class="control">
+                    <label for="court">Court</label>
+                    <select class="input-control" id="court" name="court">
+                        <option value="">All Courts</option>
+                        {% for court in all_courts %}
+                        <option value="{{ court }}" {% if court == selected_court %}selected{% endif %}>
+                            {{ court }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="control">
+                    <label for="tag">Topic</label>
+                    <select class="input-control" id="tag" name="tag">
+                        <option value="">All Topics</option>
+                        {% for tag in all_tags %}
+                        <option value="{{ tag.id }}" {% if tag.id|stringformat:"s" == selected_tag %}selected{% endif %}>
+                            {{ tag.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="actions">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                    {% if search or selected_court or selected_tag %}
+                    <a href="{% url 'legal_digest_app:public_cases_list' %}" class="btn btn-outline">Clear</a>
+                    {% endif %}
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="section">
+    <p class="muted">
+        {% if page_obj.paginator.count == 0 %}
+            No case summaries found.
+        {% elif page_obj.paginator.count == 1 %}
+            Showing 1 case summary
+        {% else %}
+            Showing {{ page_obj.start_index }}-{{ page_obj.end_index }} of {{ page_obj.paginator.count }} case summaries
+        {% endif %}
+    </p>
+</div>
+
+<div class="section">
+    <div class="stats-grid">
+        {% for case in page_obj %}
+        <div class="card">
+            <h3><a href="{% url 'legal_digest_app:public_case_detail' case.slug %}">{{ case.title }}</a></h3>
+            
+            {% if case.citation %}
+            <p class="muted">{{ case.citation }}</p>
+            {% endif %}
+
+            <div class="action-row">
+                {% if case.court %}
+                <span class="badge badge-secondary">{{ case.court }}</span>
+                {% endif %}
+                
+                {% if case.decision_date %}
+                <span class="muted">{{ case.decision_date|date:"M d, Y" }}</span>
+                {% endif %}
+            </div>
+
+            {% if case.summary_short %}
+            <p class="card-muted">{{ case.summary_short }}</p>
+            {% elif case.summary_long %}
+            <p class="card-muted">{{ case.summary_long|truncatewords:25 }}</p>
+            {% endif %}
+
+            {% if case.tags.all %}
+            <div class="action-row">
+                {% for tag in case.tags.all %}
+                <span class="badge badge-primary">{{ tag.name }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="action-row">
+                <a href="{% url 'legal_digest_app:public_case_detail' case.slug %}" class="btn btn-primary btn-sm">Read More →</a>
+            </div>
+        </div>
+        {% empty %}
+        <div class="card">
+            <p>No case summaries match your search criteria. Try adjusting your filters.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% if page_obj.has_other_pages %}
+<div class="section">
+    <div class="action-row" style="justify-content: center;">
+        {% if page_obj.has_previous %}
+        <a class="btn btn-outline" href="?page=1{% if search %}&search={{ search }}{% endif %}{% if selected_court %}&court={{ selected_court }}{% endif %}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}">First</a>
+        <a class="btn btn-outline" href="?page={{ page_obj.previous_page_number }}{% if search %}&search={{ search }}{% endif %}{% if selected_court %}&court={{ selected_court }}{% endif %}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}">Previous</a>
+        {% endif %}
+
+        <span class="btn">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+        {% if page_obj.has_next %}
+        <a class="btn btn-outline" href="?page={{ page_obj.next_page_number }}{% if search %}&search={{ search }}{% endif %}{% if selected_court %}&court={{ selected_court }}{% endif %}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}">Next</a>
+        <a class="btn btn-outline" href="?page={{ page_obj.paginator.num_pages }}{% if search %}&search={{ search }}{% endif %}{% if selected_court %}&court={{ selected_court }}{% endif %}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}">Last</a>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}

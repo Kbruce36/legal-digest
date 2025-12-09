@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 
@@ -9,7 +10,76 @@ from .models import Case, Tag
 
 
 def index(request):
-    return render(request, 'index.html')
+    # Get count of published cases for homepage
+    published_count = Case.objects.exclude(status=Case.STATUS_DRAFT).count()
+    recent_cases = Case.objects.exclude(status=Case.STATUS_DRAFT).order_by('-created_at')[:3]
+    
+    context = {
+        'published_count': published_count,
+        'recent_cases': recent_cases,
+    }
+    return render(request, 'index.html', context)
+
+
+def public_cases_list(request):
+    """Public page showing all published case summaries."""
+    # Only show non-draft cases to the public
+    cases = Case.objects.exclude(status=Case.STATUS_DRAFT).order_by('-decision_date', '-created_at')
+    
+    # Apply search/filter if provided
+    search = request.GET.get('search', '')
+    court = request.GET.get('court', '')
+    tag_id = request.GET.get('tag', '')
+    
+    if search:
+        cases = cases.filter(
+            Q(title__icontains=search) |
+            Q(citation__icontains=search) |
+            Q(court__icontains=search) |
+            Q(parties__icontains=search)
+        )
+    
+    if court:
+        cases = cases.filter(court__icontains=court)
+    
+    if tag_id:
+        cases = cases.filter(tags__id=tag_id)
+    
+    # Pagination
+    paginator = Paginator(cases, 12)  # 12 cases per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    # Get all tags and courts for filters
+    all_tags = Tag.objects.all()
+    all_courts = Case.objects.exclude(court='').exclude(status=Case.STATUS_DRAFT).values_list('court', flat=True).distinct()
+    
+    context = {
+        'page_obj': page_obj,
+        'all_tags': all_tags,
+        'all_courts': all_courts,
+        'search': search,
+        'selected_court': court,
+        'selected_tag': tag_id,
+    }
+    return render(request, 'public_cases_list.html', context)
+
+
+def public_case_detail(request, slug):
+    """Public page showing a single case summary."""
+    # Only allow viewing non-draft cases
+    case = get_object_or_404(Case.objects.exclude(status=Case.STATUS_DRAFT), slug=slug)
+    
+    # Get related cases (same tags)
+    related_cases = Case.objects.exclude(status=Case.STATUS_DRAFT).exclude(id=case.id).filter(
+        tags__in=case.tags.all()
+    ).distinct()[:3]
+    
+    context = {
+        'case': case,
+        'related_cases': related_cases,
+    }
+    return render(request, 'public_case_detail.html', context)
 
 
 @login_required
