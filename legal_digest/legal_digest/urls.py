@@ -17,14 +17,28 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.contrib.sitemaps.views import sitemap
 from django.urls import path, include
+from django.views.generic import TemplateView
 
 from legal_digest_app import views as app_views
+from legal_digest_app.sitemaps import CaseSitemap, StaticViewSitemap
+
+# Sitemap configuration
+sitemaps = {
+    'static': StaticViewSitemap,
+    'cases': CaseSitemap,
+}
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/logout/', app_views.logout_view, name='account_logout'),
     path('accounts/', include('django.contrib.auth.urls')),
+    
+    # SEO URLs
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    path('robots.txt', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
+    
     path('', include('legal_digest_app.urls')),
 ]
 

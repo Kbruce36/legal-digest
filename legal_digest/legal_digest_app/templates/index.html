@@ -1,18 +1,318 @@
 {% extends 'base.html' %}
 
-{% block title %}Welcome | Legal Digest{% endblock %}
+{% block title %}Legal Digest - Legal Case Summaries & Analysis{% endblock %}
+{% block description %}Read expert legal case summaries and analysis. Stay informed with comprehensive court case reviews, legal insights, and detailed case documentation.{% endblock %}
+{% block keywords %}legal case summaries, court cases, legal analysis, case law, legal insights, court decisions, case reviews, legal education{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* Modern homepage styles */
+  :root {
+    --primary: #1d4ed8;
+    --primary-dark: #1e40af;
+    --accent: #10b981;
+    --dark: #0b172a;
+    --light-gray: #f8fafc;
+  }
+
+  .hero-section {
+    background: linear-gradient(135deg, var(--dark) 0%, #1a2d4d 100%);
+    color: #fff;
+    padding: 5rem 2rem;
+    text-align: center;
+    margin: -32px -16px 3rem;
+    border-radius: 0 0 20px 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+  }
+
+  .hero-section h1 {
+    font-size: 2.75rem;
+    font-weight: 800;
+    margin: 0 0 1rem;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-section .subtitle {
+    font-size: 1.25rem;
+    color: #cbd5e1;
+    margin-bottom: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+  }
+
+  .btn {
+    padding: 0.875rem 2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+
+  .btn-primary {
+    background: var(--primary);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(29, 78, 216, 0.4);
+  }
+
+  .btn-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(29, 78, 216, 0.5);
+  }
+
+  .btn-secondary {
+    background: #fff;
+    color: var(--dark);
+    border: 2px solid #e2e8f0;
+  }
+
+  .btn-secondary:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+  }
+
+  .features-section {
+    margin: 4rem 0;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 2.5rem;
+  }
+
+  .feature-card {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+    border-color: var(--primary);
+  }
+
+  .feature-icon {
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, var(--primary) 0%, #3b82f6 100%);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #fff;
+    margin-bottom: 1.25rem;
+  }
+
+  .feature-card h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 0.75rem;
+  }
+
+  .feature-card p {
+    color: #64748b;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .stats-section {
+    background: var(--light-gray);
+    padding: 3rem 2rem;
+    margin: 4rem -16px;
+    border-radius: 12px;
+    text-align: center;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    max-width: 900px;
+    margin: 2rem auto 0;
+  }
+
+  .stat-item {
+    padding: 1.5rem;
+  }
+
+  .stat-number {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--primary);
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-label {
+    color: #64748b;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    letter-spacing: 0.05em;
+  }
+
+  .section-title {
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+    color: var(--dark);
+    margin-bottom: 0.75rem;
+  }
+
+  .section-subtitle {
+    text-align: center;
+    color: #64748b;
+    font-size: 1.125rem;
+    margin-bottom: 2rem;
+  }
+
+  @media (max-width: 768px) {
+    .hero-section {
+      padding: 3rem 1.5rem;
+    }
+
+    .hero-section h1 {
+      font-size: 2rem;
+    }
+
+    .hero-section .subtitle {
+      font-size: 1rem;
+    }
+
+    .features-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="card">
-    <h1 style="margin-top:0;">Welcome to Legal Digest</h1>
-    <p class="muted">A focused space for your lawyer to post and manage case summaries.</p>
-    <div style="margin-top:18px; display:flex; gap:12px; flex-wrap:wrap;">
-        {% if user.is_authenticated %}
-            <a class="button" href="{% url 'legal_digest_app:dashboard' %}" style="background:#1d4ed8;color:#fff;padding:10px 14px;border-radius:6px;">Go to dashboard</a>
-            <a href="{% url 'logout' %}" style="padding:10px 14px;border-radius:6px;border:1px solid #e3e3e8;">Logout</a>
-        {% else %}
-            <a class="button" href="{% url 'login' %}" style="background:#1d4ed8;color:#fff;padding:10px 14px;border-radius:6px;">Login to continue</a>
-        {% endif %}
+<!-- Hero Section -->
+<section class="hero-section">
+  <h1>Expert Legal Case Summaries</h1>
+  <p class="subtitle">
+    Stay informed with comprehensive case analysis and legal insights. 
+    Browse curated summaries of important court decisions and legal precedents.
+  </p>
+  
+  <div class="cta-buttons">
+    {% if user.is_authenticated %}
+      <a href="{% url 'legal_digest_app:dashboard' %}" class="btn btn-primary">Go to Dashboard</a>
+      <a href="{% url 'legal_digest_app:logout' %}" class="btn btn-secondary">Logout</a>
+    {% else %}
+      <a href="#cases" class="btn btn-primary">Browse Case Summaries</a>
+      <a href="#about" class="btn btn-secondary">Learn More</a>
+    {% endif %}
+  </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section" id="about">
+  <h2 class="section-title">What You'll Find Here</h2>
+  <p class="section-subtitle">Access professional legal analysis and case documentation</p>
+  
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">⚖️</div>
+      <h3>Comprehensive Case Analysis</h3>
+      <p>Read detailed summaries of important legal cases including key facts, legal issues, court decisions, and their implications.</p>
     </div>
-</div>
+
+    <div class="feature-card">
+      <div class="feature-icon">🔍</div>
+      <h3>Easy Search & Discovery</h3>
+      <p>Find cases by keyword, court, jurisdiction, or topic. Our search tools help you quickly locate relevant legal precedents.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">📚</div>
+      <h3>Organized by Topics</h3>
+      <p>Cases are tagged and categorized by legal area, making it simple to explore specific fields of law that interest you.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">📝</div>
+      <h3>Expert Legal Summaries</h3>
+      <p>All summaries are written by a legal professional, providing accurate and reliable case documentation you can trust.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">🎓</div>
+      <h3>Educational Resource</h3>
+      <p>Perfect for legal students, professionals, and anyone interested in understanding court decisions and legal principles.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">🔄</div>
+      <h3>Regularly Updated</h3>
+      <p>New case summaries are added regularly, keeping you informed about recent legal developments and court decisions.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-section" id="cases">
+  <h2 class="section-title">Your Legal Knowledge Resource</h2>
+  
+  <div class="stats-grid">
+    <div class="stat-item">
+      <span class="stat-number">📖</span>
+      <span class="stat-label">Expert Analysis</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number">⚡</span>
+      <span class="stat-label">Quick Search</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number">🎯</span>
+      <span class="stat-label">Organized Topics</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number">✨</span>
+      <span class="stat-label">Free Access</span>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Legal Digest",
+  "description": "Expert legal case summaries and analysis. Read comprehensive reviews of court decisions and legal precedents.",
+  "url": "{{ request.build_absolute_uri }}",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "{{ request.build_absolute_uri }}dashboard/?search={search_term_string}",
+    "query-input": "required name=search_term_string"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Legal Digest"
+  }
+}
+</script>
 {% endblock %}

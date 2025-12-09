@@ -146,52 +146,43 @@
     </div>
 
     <!-- Filter Bar -->
-    <div class="filter-bar mb-4">
-      <div class="row g-3 align-items-end">
-        <div class="col-12 col-md-4 col-lg-3">
-          <label for="searchInput" class="form-label text-muted small">Search</label>
-          <div class="input-group">
-            <span class="input-group-text bg-white"><i class="bi bi-search text-muted"></i></span>
-            <input type="text" class="form-control" id="searchInput" placeholder="Search case titles or citations" aria-label="Search cases">
+    <form method="get" action="{% url 'legal_digest_app:dashboard' %}" id="filterForm">
+      <div class="filter-bar mb-4">
+        <div class="row g-3 align-items-end">
+          <div class="col-12 col-md-4 col-lg-3">
+            <label for="{{ filter_form.search.id_for_label }}" class="form-label text-muted small">Search</label>
+            <div class="input-group">
+              <span class="input-group-text bg-white"><i class="bi bi-search text-muted"></i></span>
+              {{ filter_form.search }}
+            </div>
           </div>
-        </div>
-        <div class="col-6 col-md-4 col-lg-2">
-          <label for="courtSelect" class="form-label text-muted small">Court</label>
-          <select class="form-select" id="courtSelect" aria-label="Select court">
-            <option value="">All Courts</option>
-            <option value="supreme">Supreme Court</option>
-            <option value="federal">Federal Court</option>
-            <option value="state">State Court</option>
-            <option value="district">District Court</option>
-          </select>
-        </div>
-        <div class="col-6 col-md-4 col-lg-2">
-          <label for="statusSelect" class="form-label text-muted small">Status</label>
-          <select class="form-select" id="statusSelect" aria-label="Select status">
-            <option value="">All Statuses</option>
-            <option value="open">Open</option>
-            <option value="closed">Closed</option>
-            <option value="draft">Draft</option>
-          </select>
-        </div>
-        <div class="col-6 col-md-3 col-lg-2">
-          <label for="dateFrom" class="form-label text-muted small">From</label>
-          <input type="date" class="form-control" id="dateFrom" aria-label="Date from">
-        </div>
-        <div class="col-6 col-md-3 col-lg-2">
-          <label for="dateTo" class="form-label text-muted small">To</label>
-          <input type="date" class="form-control" id="dateTo" aria-label="Date to">
-        </div>
-        <div class="col-12 col-md-6 col-lg-1">
-          <div class="d-flex gap-2">
-            <button type="button" class="btn btn-accent flex-grow-1">
-              <i class="bi bi-funnel me-1 d-none d-xl-inline"></i>Filter
-            </button>
-            <button type="button" class="btn btn-outline-secondary">Reset</button>
+          <div class="col-6 col-md-4 col-lg-2">
+            <label for="{{ filter_form.court.id_for_label }}" class="form-label text-muted small">Court</label>
+            {{ filter_form.court }}
+          </div>
+          <div class="col-6 col-md-4 col-lg-2">
+            <label for="{{ filter_form.status.id_for_label }}" class="form-label text-muted small">Status</label>
+            {{ filter_form.status }}
+          </div>
+          <div class="col-6 col-md-3 col-lg-2">
+            <label for="{{ filter_form.date_from.id_for_label }}" class="form-label text-muted small">From</label>
+            {{ filter_form.date_from }}
+          </div>
+          <div class="col-6 col-md-3 col-lg-2">
+            <label for="{{ filter_form.date_to.id_for_label }}" class="form-label text-muted small">To</label>
+            {{ filter_form.date_to }}
+          </div>
+          <div class="col-12 col-md-6 col-lg-1">
+            <div class="d-flex gap-2">
+              <button type="submit" class="btn btn-accent flex-grow-1">
+                <i class="bi bi-funnel me-1 d-none d-xl-inline"></i>Filter
+              </button>
+              <a href="{% url 'legal_digest_app:dashboard' %}" class="btn btn-outline-secondary" title="Reset filters">Reset</a>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </form>
 
     <!-- Two Column Layout -->
     <div class="row g-4 mb-4">
@@ -218,7 +209,7 @@
                   {% if recent_cases %}
                   {% for case in recent_cases %}
                   <tr>
-                    <td class="fw-medium">{{ case.title }}</td>
+                    <td class="fw-medium"><a href="{% url 'legal_digest_app:case_detail' case.slug %}" class="text-decoration-none">{{ case.title }}</a></td>
                     <td class="text-muted">{{ case.court|default:"—" }}</td>
                     <td class="text-muted">{{ case.decision_date|date:"Y-m-d"|default:"—" }}</td>
                     <td>
@@ -232,7 +223,7 @@
                             <span class="badge bg-secondary">{{ case.get_status_display }}</span>
                         {% endif %}
                     </td>
-                    <td class="text-end"><a class="btn btn-sm btn-outline-primary" href="#">View</a></td>
+                    <td class="text-end"><a class="btn btn-sm btn-outline-primary" href="{% url 'legal_digest_app:case_detail' case.slug %}">View</a></td>
                   </tr>
                   {% endfor %}
                   {% else %}
@@ -254,13 +245,13 @@
             <i class="bi bi-lightning me-2"></i>Quick Actions
           </div>
           <div class="card-body">
-            <button class="btn btn-accent quick-action-btn">
+            <a href="{% url 'legal_digest_app:case_create' %}" class="btn btn-accent quick-action-btn">
               <i class="bi bi-plus-circle me-2"></i>New Case Summary
-            </button>
-            <button class="btn btn-outline-secondary quick-action-btn">
+            </a>
+            <a href="/admin/legal_digest_app/tag/" class="btn btn-outline-secondary quick-action-btn" target="_blank">
               <i class="bi bi-tags me-2"></i>Manage Tags
-            </button>
-            <button class="btn btn-outline-secondary quick-action-btn">
+            </a>
+            <button class="btn btn-outline-secondary quick-action-btn" disabled>
               <i class="bi bi-paperclip me-2"></i>Upload Attachment
             </button>
 

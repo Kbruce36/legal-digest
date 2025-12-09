@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sitemaps',  # For SEO sitemaps
     'legal_digest_app',
 ]
 
@@ -75,6 +76,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'legal_digest_app.context_processors.seo_context',  # SEO context
             ],
         },
     },
@@ -138,3 +140,9 @@ LOGIN_REDIRECT_URL = 'legal_digest_app:dashboard'
 LOGOUT_REDIRECT_URL = 'login'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# SEO Settings
+SITE_ID = 1
+SITE_NAME = 'Legal Digest'
+SITE_DOMAIN = os.getenv('SITE_DOMAIN', 'localhost:8000')
+SITE_PROTOCOL = os.getenv('SITE_PROTOCOL', 'http')

@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete Case | Legal Digest{% endblock %}
+
+{% block extra_css %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<style>
+  header { display: none; }
+  main { max-width: none; margin: 0; padding: 0; }
+  :root {
+    --navy-dark: #1e293b;
+    --navy-medium: #334155;
+  }
+  body { background-color: #f8fafc; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+  .navbar-custom { background-color: var(--navy-dark); }
+  .navbar-custom .navbar-brand { font-weight: 700; color: #fff; }
+  .navbar-custom .nav-link { color: rgba(255,255,255,0.85); }
+  .navbar-custom .nav-link:hover { color: #fff; }
+  .delete-section { background: #fff; border-radius: 0.75rem; padding: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-custom" aria-label="Main navigation">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'legal_digest_app:index' %}">
+      <i class="bi bi-briefcase me-2"></i>Legal Digest
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'legal_digest_app:index' %}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'legal_digest_app:dashboard' %}">Dashboard</a>
+        </li>
+      </ul>
+      <a class="btn btn-outline-light btn-sm" href="{% url 'legal_digest_app:logout' %}">
+        <i class="bi bi-box-arrow-right me-1"></i>Logout
+      </a>
+    </div>
+  </div>
+</nav>
+
+<main class="py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-8 col-xl-6">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-3">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'legal_digest_app:dashboard' %}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'legal_digest_app:case_detail' case.slug %}">{{ case.title }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Delete</li>
+          </ol>
+        </nav>
+
+        <!-- Delete Confirmation -->
+        <div class="delete-section">
+          <div class="text-center mb-4">
+            <i class="bi bi-exclamation-triangle text-danger" style="font-size: 3rem;"></i>
+          </div>
+          
+          <h1 class="h3 text-center mb-3">Delete Case?</h1>
+          
+          <div class="alert alert-danger" role="alert">
+            <strong>Warning:</strong> This action cannot be undone. All case information will be permanently deleted.
+          </div>
+
+          <div class="mb-4">
+            <p class="mb-2"><strong>Case Title:</strong> {{ case.title }}</p>
+            {% if case.citation %}
+              <p class="mb-2"><strong>Citation:</strong> {{ case.citation }}</p>
+            {% endif %}
+            {% if case.court %}
+              <p class="mb-2"><strong>Court:</strong> {{ case.court }}</p>
+            {% endif %}
+            {% if case.decision_date %}
+              <p class="mb-0"><strong>Decision Date:</strong> {{ case.decision_date|date:"F j, Y" }}</p>
+            {% endif %}
+          </div>
+
+          <form method="post">
+            {% csrf_token %}
+            <div class="d-flex gap-2 justify-content-center">
+              <button type="submit" class="btn btn-danger">
+                <i class="bi bi-trash me-1"></i>Yes, Delete Case
+              </button>
+              <a href="{% url 'legal_digest_app:case_detail' case.slug %}" class="btn btn-outline-secondary">
+                <i class="bi bi-x-circle me-1"></i>Cancel
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}
