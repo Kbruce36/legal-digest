@@ -28,6 +28,7 @@ class Case(models.Model):
     summary_long = models.TextField(blank=True, help_text="Full case summary")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    tags = models.ManyToManyField("Tag", related_name="cases", blank=True)
 
     class Meta:
         ordering = ["-decision_date", "-created_at"]
@@ -38,4 +39,21 @@ class Case(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title)[:255]
+        super().save(*args, **kwargs)
+
+
+class Tag(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    slug = models.SlugField(max_length=120, unique=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["name"]
+
+    def __str__(self) -> str:
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)[:120]
         super().save(*args, **kwargs)

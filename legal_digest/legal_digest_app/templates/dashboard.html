@@ -98,7 +98,7 @@
               <i class="bi bi-folder2-open"></i>
             </div>
             <div>
-              <div class="stat-value">24</div>
+              <div class="stat-value">{{ stats.open|default:0 }}</div>
               <div class="stat-label">Open Cases</div>
             </div>
           </div>
@@ -111,7 +111,7 @@
               <i class="bi bi-check-circle"></i>
             </div>
             <div>
-              <div class="stat-value">156</div>
+              <div class="stat-value">{{ stats.closed|default:0 }}</div>
               <div class="stat-label">Closed Cases</div>
             </div>
           </div>
@@ -124,7 +124,7 @@
               <i class="bi bi-file-earmark-text"></i>
             </div>
             <div>
-              <div class="stat-value">8</div>
+              <div class="stat-value">{{ stats.draft|default:0 }}</div>
               <div class="stat-label">Draft Summaries</div>
             </div>
           </div>
@@ -137,7 +137,7 @@
               <i class="bi bi-tags"></i>
             </div>
             <div>
-              <div class="stat-value">42</div>
+              <div class="stat-value">{{ stats.tags|default:0 }}</div>
               <div class="stat-label">Tags</div>
             </div>
           </div>
@@ -200,7 +200,7 @@
         <div class="card dashboard-card h-100">
           <div class="card-header d-flex justify-content-between align-items-center">
             <span><i class="bi bi-clock-history me-2"></i>Recent Summaries</span>
-            <span class="badge bg-secondary">12 cases</span>
+            <span class="badge bg-secondary">{{ recent_cases|length }} cases</span>
           </div>
           <div class="card-body p-0">
             <div class="table-responsive">
@@ -215,48 +215,31 @@
                   </tr>
                 </thead>
                 <tbody>
+                  {% if recent_cases %}
+                  {% for case in recent_cases %}
                   <tr>
-                    <td class="fw-medium">Smith v. Johnson Holdings LLC</td>
-                    <td class="text-muted">Supreme Court</td>
-                    <td class="text-muted">2024-01-15</td>
-                    <td><span class="badge badge-open">Open</span></td>
-                    <td class="text-end"><button class="btn btn-sm btn-outline-primary">View</button></td>
+                    <td class="fw-medium">{{ case.title }}</td>
+                    <td class="text-muted">{{ case.court|default:"—" }}</td>
+                    <td class="text-muted">{{ case.decision_date|date:"Y-m-d"|default:"—" }}</td>
+                    <td>
+                        {% if case.status == 'open' %}
+                            <span class="badge badge-open">Open</span>
+                        {% elif case.status == 'closed' %}
+                            <span class="badge badge-closed">Closed</span>
+                        {% elif case.status == 'draft' %}
+                            <span class="badge badge-draft">Draft</span>
+                        {% else %}
+                            <span class="badge bg-secondary">{{ case.get_status_display }}</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-end"><a class="btn btn-sm btn-outline-primary" href="#">View</a></td>
                   </tr>
+                  {% endfor %}
+                  {% else %}
                   <tr>
-                    <td class="fw-medium">State v. Williams</td>
-                    <td class="text-muted">Federal Court</td>
-                    <td class="text-muted">2024-01-12</td>
-                    <td><span class="badge badge-closed">Closed</span></td>
-                    <td class="text-end"><button class="btn btn-sm btn-outline-primary">View</button></td>
+                    <td colspan="5" class="text-center text-muted py-3">No cases yet.</td>
                   </tr>
-                  <tr>
-                    <td class="fw-medium">Martinez Corp v. Tech Industries</td>
-                    <td class="text-muted">State Court</td>
-                    <td class="text-muted">2024-01-10</td>
-                    <td><span class="badge badge-draft">Draft</span></td>
-                    <td class="text-end"><button class="btn btn-sm btn-outline-primary">View</button></td>
-                  </tr>
-                  <tr>
-                    <td class="fw-medium">In re: Global Investments Trust</td>
-                    <td class="text-muted">District Court</td>
-                    <td class="text-muted">2024-01-08</td>
-                    <td><span class="badge badge-open">Open</span></td>
-                    <td class="text-end"><button class="btn btn-sm btn-outline-primary">View</button></td>
-                  </tr>
-                  <tr>
-                    <td class="fw-medium">Davis v. Metropolitan Insurance</td>
-                    <td class="text-muted">Federal Court</td>
-                    <td class="text-muted">2024-01-05</td>
-                    <td><span class="badge badge-closed">Closed</span></td>
-                    <td class="text-end"><button class="btn btn-sm btn-outline-primary">View</button></td>
-                  </tr>
-                  <tr>
-                    <td class="fw-medium">Wilson Healthcare v. State Board</td>
-                    <td class="text-muted">Supreme Court</td>
-                    <td class="text-muted">2024-01-03</td>
-                    <td><span class="badge badge-open">Open</span></td>
-                    <td class="text-end"><button class="btn btn-sm btn-outline-primary">View</button></td>
-                  </tr>
+                  {% endif %}
                 </tbody>
               </table>
             </div>
@@ -307,48 +290,24 @@
       </div>
       <div class="card-body">
         <div class="row">
-          <div class="col-12 col-md-6 col-lg-4">
-            <div class="timeline-item">
-              <div class="fw-medium">Sarah Chen</div>
-              <div class="text-muted small">Updated summary for Smith v. Johnson</div>
-              <div class="timeline-time">2 hours ago</div>
+          {% if activity_items %}
+            {% for item in activity_items %}
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="timeline-item">
+                <div class="fw-medium">{{ item.title }}</div>
+                <div class="text-muted small">Status: {{ item.get_status_display }}</div>
+                <div class="timeline-time">{{ item.updated_at|date:"M j, Y H:i" }}</div>
+              </div>
             </div>
-          </div>
-          <div class="col-12 col-md-6 col-lg-4">
-            <div class="timeline-item">
-              <div class="fw-medium">Michael Roberts</div>
-              <div class="text-muted small">Added new case: State v. Williams</div>
-              <div class="timeline-time">4 hours ago</div>
+            {% endfor %}
+          {% else %}
+            <div class="col-12">
+              <div class="timeline-item">
+                <div class="fw-medium">No activity yet</div>
+                <div class="text-muted small">Add a case to see updates here.</div>
+              </div>
             </div>
-          </div>
-          <div class="col-12 col-md-6 col-lg-4">
-            <div class="timeline-item">
-              <div class="fw-medium">Emily Watson</div>
-              <div class="text-muted small">Closed case: Davis v. Metro Insurance</div>
-              <div class="timeline-time">Yesterday</div>
-            </div>
-          </div>
-          <div class="col-12 col-md-6 col-lg-4">
-            <div class="timeline-item">
-              <div class="fw-medium">James Liu</div>
-              <div class="text-muted small">Uploaded 3 attachments to Martinez Corp</div>
-              <div class="timeline-time">Yesterday</div>
-            </div>
-          </div>
-          <div class="col-12 col-md-6 col-lg-4">
-            <div class="timeline-item">
-              <div class="fw-medium">Anna Martinez</div>
-              <div class="text-muted small">Created new tag: "Intellectual Property"</div>
-              <div class="timeline-time">2 days ago</div>
-            </div>
-          </div>
-          <div class="col-12 col-md-6 col-lg-4">
-            <div class="timeline-item">
-              <div class="fw-medium">David Park</div>
-              <div class="text-muted small">Exported report for Q4 2023</div>
-              <div class="timeline-time">3 days ago</div>
-            </div>
-          </div>
+          {% endif %}
         </div>
       </div>
     </div>
