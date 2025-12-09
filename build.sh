@@ -13,3 +13,6 @@ python manage.py collectstatic --no-input
 
 # Run migrations
 python manage.py migrate
+
+# Create superuser automatically
+python manage.py ensure_superuser
