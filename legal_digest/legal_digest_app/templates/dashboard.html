@@ -1,0 +1,368 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard | Legal Digest{% endblock %}
+
+{% block extra_css %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<style>
+  /* Hide the base header and reset main spacing so we can use the full-width Bootstrap layout. */
+  header { display: none; }
+  main { max-width: none; margin: 0; padding: 0; }
+</style>
+<style>
+  :root {
+    --navy-dark: #1e293b;
+    --navy-medium: #334155;
+    --navy-light: #475569;
+    --accent-green: #10b981;
+    --accent-green-dark: #059669;
+  }
+  body { background-color: #f8fafc; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+  .navbar-custom { background-color: var(--navy-dark); }
+  .navbar-custom .navbar-brand { font-weight: 700; color: #fff; }
+  .navbar-custom .nav-link { color: rgba(255,255,255,0.85); }
+  .navbar-custom .nav-link:hover, .navbar-custom .nav-link.active { color: #fff; }
+  .hero-section { background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-medium) 100%); color: #fff; padding: 3rem 0; }
+  .stat-card { border: none; border-radius: 0.75rem; transition: transform 0.2s, box-shadow 0.2s; }
+  .stat-card:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+  .stat-card .stat-value { font-size: 2.5rem; font-weight: 700; color: var(--navy-dark); }
+  .stat-card .stat-label { color: #64748b; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .stat-card .stat-icon { width: 48px; height: 48px; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; }
+  .filter-bar { background: #fff; border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+  .dashboard-card { border: none; border-radius: 0.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+  .dashboard-card .card-header { background: #fff; border-bottom: 1px solid #e2e8f0; font-weight: 600; color: var(--navy-dark); padding: 1rem 1.25rem; border-radius: 0.75rem 0.75rem 0 0; }
+  .table-custom thead th { background-color: #f8fafc; color: var(--navy-light); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 2px solid #e2e8f0; }
+  .table-custom tbody tr:hover { background-color: #f1f5f9; }
+  .btn-accent { background-color: var(--accent-green); border-color: var(--accent-green); color: #fff; }
+  .btn-accent:hover { background-color: var(--accent-green-dark); border-color: var(--accent-green-dark); color: #fff; }
+  .quick-action-btn { width: 100%; text-align: left; padding: 0.75rem 1rem; border-radius: 0.5rem; margin-bottom: 0.5rem; transition: all 0.2s; }
+  .quick-action-btn:hover { transform: translateX(4px); }
+  .saved-search-item { padding: 0.5rem 0; border-bottom: 1px solid #e2e8f0; color: var(--navy-medium); cursor: pointer; transition: color 0.2s; }
+  .saved-search-item:hover { color: var(--accent-green); }
+  .saved-search-item:last-child { border-bottom: none; }
+  .timeline-item { position: relative; padding-left: 1.5rem; padding-bottom: 1rem; border-left: 2px solid #e2e8f0; }
+  .timeline-item:last-child { border-left: 2px solid transparent; padding-bottom: 0; }
+  .timeline-item::before { content: ''; position: absolute; left: -5px; top: 0; width: 10px; height: 10px; border-radius: 50%; background: var(--accent-green); border: 2px solid #fff; }
+  .timeline-item .timeline-time { font-size: 0.75rem; color: #94a3b8; }
+  .footer-custom { background-color: var(--navy-dark); color: rgba(255,255,255,0.6); padding: 1.5rem 0; }
+  .badge-open { background-color: #3b82f6; }
+  .badge-closed { background-color: #10b981; }
+  .badge-draft { background-color: #64748b; }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-custom" aria-label="Main navigation">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'legal_digest_app:index' %}">
+      <i class="bi bi-briefcase me-2"></i>Legal Digest
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'legal_digest_app:index' %}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{% url 'legal_digest_app:dashboard' %}">Dashboard</a>
+        </li>
+      </ul>
+      <a class="btn btn-outline-light btn-sm" href="{% url 'legal_digest_app:logout' %}">
+        <i class="bi bi-box-arrow-right me-1"></i>Logout
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="container">
+    <h1 class="display-5 fw-bold mb-2">Case Summaries Dashboard</h1>
+    <p class="lead text-white-50 mb-0">Manage and track your legal case summaries, documents, and activity</p>
+  </div>
+</section>
+
+<!-- Main Content -->
+<main class="py-4">
+  <div class="container">
+    <!-- Stats Row -->
+    <div class="row g-4 mb-4">
+      <div class="col-6 col-lg-3">
+        <div class="card stat-card h-100">
+          <div class="card-body d-flex align-items-center">
+            <div class="stat-icon bg-primary bg-opacity-10 text-primary me-3">
+              <i class="bi bi-folder2-open"></i>
+            </div>
+            <div>
+              <div class="stat-value">24</div>
+              <div class="stat-label">Open Cases</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="card stat-card h-100">
+          <div class="card-body d-flex align-items-center">
+            <div class="stat-icon bg-success bg-opacity-10 text-success me-3">
+              <i class="bi bi-check-circle"></i>
+            </div>
+            <div>
+              <div class="stat-value">156</div>
+              <div class="stat-label">Closed Cases</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="card stat-card h-100">
+          <div class="card-body d-flex align-items-center">
+            <div class="stat-icon bg-secondary bg-opacity-10 text-secondary me-3">
+              <i class="bi bi-file-earmark-text"></i>
+            </div>
+            <div>
+              <div class="stat-value">8</div>
+              <div class="stat-label">Draft Summaries</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="card stat-card h-100">
+          <div class="card-body d-flex align-items-center">
+            <div class="stat-icon bg-warning bg-opacity-10 text-warning me-3">
+              <i class="bi bi-tags"></i>
+            </div>
+            <div>
+              <div class="stat-value">42</div>
+              <div class="stat-label">Tags</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar mb-4">
+      <div class="row g-3 align-items-end">
+        <div class="col-12 col-md-4 col-lg-3">
+          <label for="searchInput" class="form-label text-muted small">Search</label>
+          <div class="input-group">
+            <span class="input-group-text bg-white"><i class="bi bi-search text-muted"></i></span>
+            <input type="text" class="form-control" id="searchInput" placeholder="Search case titles or citations" aria-label="Search cases">
+          </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+          <label for="courtSelect" class="form-label text-muted small">Court</label>
+          <select class="form-select" id="courtSelect" aria-label="Select court">
+            <option value="">All Courts</option>
+            <option value="supreme">Supreme Court</option>
+            <option value="federal">Federal Court</option>
+            <option value="state">State Court</option>
+            <option value="district">District Court</option>
+          </select>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+          <label for="statusSelect" class="form-label text-muted small">Status</label>
+          <select class="form-select" id="statusSelect" aria-label="Select status">
+            <option value="">All Statuses</option>
+            <option value="open">Open</option>
+            <option value="closed">Closed</option>
+            <option value="draft">Draft</option>
+          </select>
+        </div>
+        <div class="col-6 col-md-3 col-lg-2">
+          <label for="dateFrom" class="form-label text-muted small">From</label>
+          <input type="date" class="form-control" id="dateFrom" aria-label="Date from">
+        </div>
+        <div class="col-6 col-md-3 col-lg-2">
+          <label for="dateTo" class="form-label text-muted small">To</label>
+          <input type="date" class="form-control" id="dateTo" aria-label="Date to">
+        </div>
+        <div class="col-12 col-md-6 col-lg-1">
+          <div class="d-flex gap-2">
+            <button type="button" class="btn btn-accent flex-grow-1">
+              <i class="bi bi-funnel me-1 d-none d-xl-inline"></i>Filter
+            </button>
+            <button type="button" class="btn btn-outline-secondary">Reset</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Two Column Layout -->
+    <div class="row g-4 mb-4">
+      <!-- Recent Summaries -->
+      <div class="col-12 col-lg-8">
+        <div class="card dashboard-card h-100">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <span><i class="bi bi-clock-history me-2"></i>Recent Summaries</span>
+            <span class="badge bg-secondary">12 cases</span>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-custom table-hover mb-0" aria-label="Recent case summaries">
+                <thead>
+                  <tr>
+                    <th scope="col">Title</th>
+                    <th scope="col">Court</th>
+                    <th scope="col">Decision Date</th>
+                    <th scope="col">Status</th>
+                    <th scope="col" class="text-end">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="fw-medium">Smith v. Johnson Holdings LLC</td>
+                    <td class="text-muted">Supreme Court</td>
+                    <td class="text-muted">2024-01-15</td>
+                    <td><span class="badge badge-open">Open</span></td>
+                    <td class="text-end"><button class="btn btn-sm btn-outline-primary">View</button></td>
+                  </tr>
+                  <tr>
+                    <td class="fw-medium">State v. Williams</td>
+                    <td class="text-muted">Federal Court</td>
+                    <td class="text-muted">2024-01-12</td>
+                    <td><span class="badge badge-closed">Closed</span></td>
+                    <td class="text-end"><button class="btn btn-sm btn-outline-primary">View</button></td>
+                  </tr>
+                  <tr>
+                    <td class="fw-medium">Martinez Corp v. Tech Industries</td>
+                    <td class="text-muted">State Court</td>
+                    <td class="text-muted">2024-01-10</td>
+                    <td><span class="badge badge-draft">Draft</span></td>
+                    <td class="text-end"><button class="btn btn-sm btn-outline-primary">View</button></td>
+                  </tr>
+                  <tr>
+                    <td class="fw-medium">In re: Global Investments Trust</td>
+                    <td class="text-muted">District Court</td>
+                    <td class="text-muted">2024-01-08</td>
+                    <td><span class="badge badge-open">Open</span></td>
+                    <td class="text-end"><button class="btn btn-sm btn-outline-primary">View</button></td>
+                  </tr>
+                  <tr>
+                    <td class="fw-medium">Davis v. Metropolitan Insurance</td>
+                    <td class="text-muted">Federal Court</td>
+                    <td class="text-muted">2024-01-05</td>
+                    <td><span class="badge badge-closed">Closed</span></td>
+                    <td class="text-end"><button class="btn btn-sm btn-outline-primary">View</button></td>
+                  </tr>
+                  <tr>
+                    <td class="fw-medium">Wilson Healthcare v. State Board</td>
+                    <td class="text-muted">Supreme Court</td>
+                    <td class="text-muted">2024-01-03</td>
+                    <td><span class="badge badge-open">Open</span></td>
+                    <td class="text-end"><button class="btn btn-sm btn-outline-primary">View</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="col-12 col-lg-4">
+        <div class="card dashboard-card h-100">
+          <div class="card-header">
+            <i class="bi bi-lightning me-2"></i>Quick Actions
+          </div>
+          <div class="card-body">
+            <button class="btn btn-accent quick-action-btn">
+              <i class="bi bi-plus-circle me-2"></i>New Case Summary
+            </button>
+            <button class="btn btn-outline-secondary quick-action-btn">
+              <i class="bi bi-tags me-2"></i>Manage Tags
+            </button>
+            <button class="btn btn-outline-secondary quick-action-btn">
+              <i class="bi bi-paperclip me-2"></i>Upload Attachment
+            </button>
+
+            <hr class="my-4">
+
+            <h6 class="text-muted small text-uppercase mb-3">
+              <i class="bi bi-bookmark me-2"></i>Saved Searches
+            </h6>
+            <div class="saved-search-item">
+              <i class="bi bi-search me-2 small"></i>Federal Court - Open Cases
+            </div>
+            <div class="saved-search-item">
+              <i class="bi bi-search me-2 small"></i>Recent Contract Disputes
+            </div>
+            <div class="saved-search-item">
+              <i class="bi bi-search me-2 small"></i>Pending Appeals 2024
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Activity Timeline -->
+    <div class="card dashboard-card">
+      <div class="card-header">
+        <i class="bi bi-activity me-2"></i>Recent Activity
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="timeline-item">
+              <div class="fw-medium">Sarah Chen</div>
+              <div class="text-muted small">Updated summary for Smith v. Johnson</div>
+              <div class="timeline-time">2 hours ago</div>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="timeline-item">
+              <div class="fw-medium">Michael Roberts</div>
+              <div class="text-muted small">Added new case: State v. Williams</div>
+              <div class="timeline-time">4 hours ago</div>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="timeline-item">
+              <div class="fw-medium">Emily Watson</div>
+              <div class="text-muted small">Closed case: Davis v. Metro Insurance</div>
+              <div class="timeline-time">Yesterday</div>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="timeline-item">
+              <div class="fw-medium">James Liu</div>
+              <div class="text-muted small">Uploaded 3 attachments to Martinez Corp</div>
+              <div class="timeline-time">Yesterday</div>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="timeline-item">
+              <div class="fw-medium">Anna Martinez</div>
+              <div class="text-muted small">Created new tag: "Intellectual Property"</div>
+              <div class="timeline-time">2 days ago</div>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="timeline-item">
+              <div class="fw-medium">David Park</div>
+              <div class="text-muted small">Exported report for Q4 2023</div>
+              <div class="timeline-time">3 days ago</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Footer -->
+<footer class="footer-custom mt-5">
+  <div class="container text-center">
+    <small>Legal Digest — internal use only</small>
+  </div>
+</footer>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}

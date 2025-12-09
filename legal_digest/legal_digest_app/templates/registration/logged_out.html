@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Logged out | Legal Digest{% endblock %}
+
+{% block content %}
+<div class="card auth-card">
+    <h1>Logged out</h1>
+    <p class="muted">You have been signed out. Thanks for visiting.</p>
+    <div class="action-row">
+        <a href="{% url 'legal_digest_app:index' %}" class="btn-ghost">Back to home</a>
+        <a href="{% url 'login' %}" class="btn-primary">Sign in again</a>
+    </div>
+</div>
+{% endblock %}
+
