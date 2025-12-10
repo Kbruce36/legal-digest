@@ -6,25 +6,25 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     
     <!-- SEO Meta Tags -->
-    <title>{% block title %}Legal Digest - Expert Legal Case Summaries & Analysis{% endblock %}</title>
-    <meta name="description" content="{% block description %}Read expert legal case summaries and analysis. Browse comprehensive court case reviews, legal insights, and detailed case documentation from a legal professional.{% endblock %}">
-    <meta name="keywords" content="{% block keywords %}legal case summaries, court cases, legal analysis, case law, legal insights, court decisions, case reviews, legal education{% endblock %}">
-    <meta name="author" content="Legal Digest">
+    <title>{% block title %}AI and Human Rights Hub - Documenting AI's Impact on Human Rights{% endblock %}</title>
+    <meta name="description" content="{% block description %}Explore how artificial intelligence affects human rights worldwide. Expert analysis on AI surveillance, algorithmic bias, freedom of expression, child safety, and AI in public services.{% endblock %}">
+    <meta name="keywords" content="{% block keywords %}AI human rights, artificial intelligence ethics, algorithmic bias, AI surveillance, freedom of expression, child safety, AI governance, human rights documentation{% endblock %}">
+    <meta name="author" content="AI and Human Rights Hub">
     <meta name="robots" content="{% block robots %}index, follow{% endblock %}">
     <meta name="google-site-verification" content="2WnVoPIMaITZ3fGcoCfyQ-ifWGqHV6C21Ic6Q5Zceck" />
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ request.build_absolute_uri }}">
-    <meta property="og:title" content="{% block og_title %}Legal Digest - Expert Legal Case Summaries{% endblock %}">
-    <meta property="og:description" content="{% block og_description %}Read expert legal case summaries and analysis from a professional lawyer. Browse court cases and legal insights.{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}AI and Human Rights Hub - Documenting AI's Impact{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Expert analysis on how artificial intelligence impacts human rights worldwide. Cases, commentary, and documentation.{% endblock %}">
     <meta property="og:image" content="{% block og_image %}{% load static %}{{ request.scheme }}://{{ request.get_host }}{% static 'images/og-image.png' %}{% endblock %}">
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="{{ request.build_absolute_uri }}">
-    <meta property="twitter:title" content="{% block twitter_title %}Legal Digest - Expert Case Summaries{% endblock %}">
-    <meta property="twitter:description" content="{% block twitter_description %}Read expert legal case summaries and analysis from a professional lawyer.{% endblock %}">
+    <meta property="twitter:title" content="{% block twitter_title %}AI and Human Rights Hub{% endblock %}">
+    <meta property="twitter:description" content="{% block twitter_description %}Documenting how AI affects human rights: surveillance, bias, freedom of expression, and more.{% endblock %}">
     
     <!-- Canonical URL -->
     <link rel="canonical" href="{% block canonical %}{{ request.build_absolute_uri }}{% endblock %}">
@@ -42,12 +42,12 @@
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
-      "name": "Legal Digest",
-      "description": "Expert legal case summaries and analysis",
+      "name": "AI and Human Rights Hub",
+      "description": "Documenting how artificial intelligence impacts human rights worldwide",
       "url": "{{ request.build_absolute_uri }}",
       "publisher": {
         "@type": "Organization",
-        "name": "Legal Digest"
+        "name": "AI and Human Rights Hub"
       }
     }
     </script>
@@ -55,9 +55,11 @@
 </head>
 <body>
     <header>
-        <div class="brand"><a href="{% url 'legal_digest_app:index' %}">Legal Digest</a></div>
+        <div class="brand"><a href="{% url 'legal_digest_app:index' %}">AI and Human Rights Hub</a></div>
         <nav>
             <a href="{% url 'legal_digest_app:index' %}">Home</a>
+            <a href="{% url 'legal_digest_app:about' %}">About</a>
+            <a href="{% url 'legal_digest_app:public_cases_list' %}">AI Cases</a>
             {% if user.is_authenticated %}
                 <a href="{% url 'legal_digest_app:dashboard' %}">Dashboard</a>
                 <a href="{% url 'legal_digest_app:logout' %}" class="button">Logout</a>

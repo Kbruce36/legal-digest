@@ -1,23 +1,23 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Case Summaries - {{ site_name }}{% endblock %}
+{% block title %}AI Cases - {{ site_name }}{% endblock %}
 
-{% block meta_description %}Browse expert legal case summaries and analysis. Find court decisions, case law, and legal precedents.{% endblock %}
+{% block meta_description %}Browse documented cases of how AI impacts human rights worldwide. Search cases on surveillance, algorithmic bias, freedom of expression, and child safety.{% endblock %}
 
 {% block extra_head %}
-<meta property="og:title" content="Case Summaries - {{ site_name }}" />
-<meta property="og:description" content="Browse expert legal case summaries and analysis. Find court decisions, case law, and legal precedents." />
+<meta property="og:title" content="AI Cases - {{ site_name }}" />
+<meta property="og:description" content="Browse documented cases of how AI impacts human rights worldwide. Surveillance, bias, freedom of expression, and more." />
 <meta property="og:type" content="website" />
 <meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="Case Summaries - {{ site_name }}" />
-<meta name="twitter:description" content="Browse expert legal case summaries and analysis." />
+<meta name="twitter:title" content="AI Cases - {{ site_name }}" />
+<meta name="twitter:description" content="Documented cases of AI impacting human rights worldwide." />
 {% endblock %}
 
 {% block content %}
 <div class="section">
-    <h1>Case Summaries</h1>
-    <p class="muted">Expert analysis of important legal decisions</p>
+    <h1>Documented AI Cases</h1>
+    <p class="muted">How artificial intelligence impacts human rights worldwide</p>
 </div>
 
 <div class="section">
@@ -72,11 +72,11 @@
 <div class="section">
     <p class="muted">
         {% if page_obj.paginator.count == 0 %}
-            No case summaries found.
+            No AI cases found.
         {% elif page_obj.paginator.count == 1 %}
-            Showing 1 case summary
+            Showing 1 AI case
         {% else %}
-            Showing {{ page_obj.start_index }}-{{ page_obj.end_index }} of {{ page_obj.paginator.count }} case summaries
+            Showing {{ page_obj.start_index }}-{{ page_obj.end_index }} of {{ page_obj.paginator.count }} AI cases
         {% endif %}
     </p>
 </div>
@@ -121,7 +121,7 @@
         </div>
         {% empty %}
         <div class="card">
-            <p>No case summaries match your search criteria. Try adjusting your filters.</p>
+            <p>No AI cases match your search criteria. Try adjusting your filters.</p>
         </div>
         {% endfor %}
     </div>

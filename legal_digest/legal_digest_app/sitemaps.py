@@ -9,7 +9,7 @@ class StaticViewSitemap(Sitemap):
     changefreq = 'monthly'
 
     def items(self):
-        return ['legal_digest_app:index']
+        return ['legal_digest_app:index', 'legal_digest_app:about', 'legal_digest_app:public_cases_list']
 
     def location(self, item):
         return reverse(item)
@@ -27,5 +27,6 @@ class CaseSitemap(Sitemap):
     def lastmod(self, obj):
         return obj.updated_at
 
-    def location(self, item):  # Changed back to 'item' for consistency
-        return reverse('legal_digest_app:case_detail', args=[item.slug])
+    def location(self, item):
+        # Use public_case_detail for publicly accessible URLs
+        return reverse('legal_digest_app:public_case_detail', args=[item.slug])

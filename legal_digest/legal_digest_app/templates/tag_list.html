@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage Tags | AI and Human Rights Hub{% endblock %}
+
+{% block extra_css %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<style>
+  header { display: none; }
+  main { max-width: none; margin: 0; padding: 0; }
+  :root {
+    --navy-dark: #1e293b;
+    --navy-medium: #334155;
+  }
+  body { background-color: #f8fafc; }
+  .navbar-custom { background-color: var(--navy-dark); }
+  .navbar-custom .navbar-brand { font-weight: 700; color: #fff; }
+  .navbar-custom .nav-link { color: rgba(255,255,255,0.85); }
+  .navbar-custom .nav-link:hover, .navbar-custom .nav-link.active { color: #fff; }
+</style>
+{% endblock %}
+
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-custom">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'legal_digest_app:index' %}">
+      <i class="bi bi-cpu me-2"></i>AI and Human Rights Hub
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'legal_digest_app:index' %}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'legal_digest_app:dashboard' %}">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'legal_digest_app:tag_list' %}">Tags</a>
+        </li>
+      </ul>
+      <a class="btn btn-outline-light btn-sm" href="{% url 'legal_digest_app:logout' %}">
+        <i class="bi bi-box-arrow-right me-1"></i>Logout
+      </a>
+    </div>
+  </div>
+</nav>
+
+<main class="py-4">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1 class="h3 mb-0">Manage Tags</h1>
+      <a href="{% url 'legal_digest_app:tag_create' %}" class="btn btn-primary">
+        <i class="bi bi-plus-circle me-1"></i>New Tag
+      </a>
+    </div>
+
+    {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+      {% endfor %}
+    {% endif %}
+
+    {% if tag_stats %}
+    <div class="card">
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead>
+              <tr>
+                <th>Tag Name</th>
+                <th>Total Cases</th>
+                <th>Published Cases</th>
+                <th class="text-end">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for stat in tag_stats %}
+              <tr>
+                <td>
+                  <span class="badge bg-primary">{{ stat.tag.name }}</span>
+                </td>
+                <td>{{ stat.case_count }}</td>
+                <td>{{ stat.published_count }}</td>
+                <td class="text-end">
+                  <a href="{% url 'legal_digest_app:tag_edit' stat.tag.slug %}" class="btn btn-sm btn-outline-primary">
+                    <i class="bi bi-pencil"></i> Edit
+                  </a>
+                  <a href="{% url 'legal_digest_app:tag_delete' stat.tag.slug %}" class="btn btn-sm btn-outline-danger">
+                    <i class="bi bi-trash"></i> Delete
+                  </a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+      <i class="bi bi-info-circle me-2"></i>No tags created yet. <a href="{% url 'legal_digest_app:tag_create' %}">Create your first tag</a>.
+    </div>
+    {% endif %}
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}

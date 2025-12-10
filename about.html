@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About - AI and Human Rights Hub</title>
+  <meta name="description" content="Learn about the AI and Human Rights Hub - our mission to document, analyze, and advocate for human rights in the age of artificial intelligence.">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-dark: #1a2744;
+      --primary-blue: #2563eb;
+      --accent-gold: #d4a855;
+      --accent-teal: #0d9488;
+      --text-dark: #1e293b;
+      --text-muted: #64748b;
+      --bg-light: #f8fafc;
+      --bg-cream: #fefdfb;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text-dark);
+      background-color: var(--bg-cream);
+    }
+    
+    h1, h2, h3, h4 {
+      font-family: 'Playfair Display', Georgia, serif;
+    }
+    
+    /* Navbar */
+    .navbar {
+      background-color: var(--primary-dark);
+      padding: 1rem 0;
+    }
+    
+    .navbar-brand {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: #fff !important;
+    }
+    
+    .navbar-brand span {
+      color: var(--accent-gold);
+    }
+    
+    .nav-link {
+      color: rgba(255,255,255,0.85) !important;
+      font-weight: 500;
+      padding: 0.5rem 1rem !important;
+      transition: color 0.2s;
+    }
+    
+    .nav-link:hover, .nav-link.active {
+      color: #fff !important;
+    }
+    
+    .nav-link.active {
+      border-bottom: 2px solid var(--accent-gold);
+    }
+    
+    /* Hero Section */
+    .hero-section {
+      background: linear-gradient(135deg, var(--primary-dark) 0%, #2d3a52 100%);
+      color: #fff;
+      padding: 5rem 0 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 40%;
+      height: 100%;
+      background: radial-gradient(circle at 70% 30%, rgba(37, 99, 235, 0.15) 0%, transparent 60%);
+    }
+    
+    .hero-section h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+    
+    .hero-section .lead {
+      font-size: 1.25rem;
+      opacity: 0.9;
+      max-width: 600px;
+    }
+    
+    .gold-accent {
+      color: var(--accent-gold);
+    }
+    
+    /* Section Styling */
+    .section {
+      padding: 4rem 0;
+    }
+    
+    .section-alt {
+      background-color: var(--bg-light);
+    }
+    
+    .section-title {
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      color: var(--primary-dark);
+    }
+    
+    .section-title::after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 3px;
+      background: var(--accent-gold);
+      margin-top: 0.75rem;
+    }
+    
+    /* Mission Card */
+    .mission-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 2.5rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      border-left: 4px solid var(--accent-gold);
+      height: 100%;
+    }
+    
+    .mission-card h3 {
+      font-size: 1.5rem;
+      color: var(--primary-dark);
+      margin-bottom: 1rem;
+    }
+    
+    .mission-card p {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      line-height: 1.8;
+      margin-bottom: 0;
+    }
+    
+    /* Feature Cards */
+    .feature-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+      height: 100%;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+    
+    .feature-icon {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, var(--primary-blue) 0%, var(--accent-teal) 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+    }
+    
+    .feature-icon svg {
+      width: 28px;
+      height: 28px;
+      color: #fff;
+    }
+    
+    .feature-card h4 {
+      font-size: 1.25rem;
+      color: var(--primary-dark);
+      margin-bottom: 0.75rem;
+    }
+    
+    .feature-card p {
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 0;
+    }
+    
+    /* Why It Matters */
+    .matters-section {
+      background: linear-gradient(135deg, var(--primary-dark) 0%, #2d3a52 100%);
+      color: #fff;
+    }
+    
+    .matters-section .section-title {
+      color: #fff;
+    }
+    
+    .matters-section .section-title::after {
+      background: var(--accent-gold);
+    }
+    
+    .stat-item {
+      text-align: center;
+      padding: 1.5rem;
+    }
+    
+    .stat-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--accent-gold);
+    }
+    
+    .stat-label {
+      font-size: 0.95rem;
+      opacity: 0.85;
+      margin-top: 0.5rem;
+    }
+    
+    /* Global Coverage */
+    .coverage-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--bg-light);
+      padding: 0.75rem 1.25rem;
+      border-radius: 50px;
+      font-weight: 500;
+      color: var(--primary-dark);
+      margin: 0.25rem;
+    }
+    
+    .coverage-badge svg {
+      width: 18px;
+      height: 18px;
+      color: var(--accent-teal);
+    }
+    
+    /* Expert Section */
+    .expert-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+      text-align: center;
+    }
+    
+    .expert-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-blue), var(--accent-teal));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: #fff;
+    }
+    
+    .expert-name {
+      font-weight: 600;
+      color: var(--primary-dark);
+      margin-bottom: 0.25rem;
+    }
+    
+    .expert-title {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+    
+    /* Footer */
+    footer {
+      background-color: var(--primary-dark);
+      color: rgba(255,255,255,0.7);
+      padding: 3rem 0 2rem;
+    }
+    
+    footer a {
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+    }
+    
+    footer a:hover {
+      color: var(--accent-gold);
+    }
+    
+    .footer-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    
+    .footer-brand span {
+      color: var(--accent-gold);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero-section h1 {
+        font-size: 2.25rem;
+      }
+      
+      .section {
+        padding: 3rem 0;
+      }
+      
+      .stat-number {
+        font-size: 2.25rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top" aria-label="Main navigation">
+    <div class="container">
+      <a class="navbar-brand" href="#">AI <span>&</span> Human Rights Hub</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="#" aria-current="page">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Case Studies</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Resources</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Contact</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero-section" aria-labelledby="page-title">
+    <div class="container position-relative">
+      <h1 id="page-title">About <span class="gold-accent">Our Mission</span></h1>
+      <p class="lead">Bridging the gap between artificial intelligence innovation and fundamental human rights protection through research, documentation, and advocacy.</p>
+    </div>
+  </section>
+
+  <!-- Mission & Vision Section -->
+  <section class="section" aria-labelledby="mission-heading">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <div class="mission-card">
+            <h3 id="mission-heading">Our Mission</h3>
+            <p>To safeguard human dignity in the digital age by monitoring, documenting, and challenging the misuse of artificial intelligence. We believe that technology must serve humanity—not undermine the rights and freedoms that define us.</p>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="mission-card">
+            <h3>Our Vision</h3>
+            <p>A world where artificial intelligence systems are designed, deployed, and governed with respect for human rights at their core—where innovation and ethics advance together, ensuring technology empowers rather than endangers.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What We Do Section -->
+  <section class="section section-alt" aria-labelledby="what-we-do-heading">
+    <div class="container">
+      <h2 id="what-we-do-heading" class="section-title">What We Do</h2>
+      <div class="row g-4 mt-2">
+        <div class="col-md-6 col-lg-3">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+            <h4>Track AI Impacts</h4>
+            <p>We monitor how AI systems affect human rights globally—from facial recognition to algorithmic decision-making in justice, employment, and social services.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+              </svg>
+            </div>
+            <h4>Publish Case Summaries</h4>
+            <p>Our team researches and publishes detailed case summaries documenting real-world instances where AI has impacted human rights—both positively and negatively.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+              </svg>
+            </div>
+            <h4>Legal Commentary</h4>
+            <p>Expert analysis of emerging AI regulations, court decisions, and policy frameworks from leading human rights lawyers and technology ethicists.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+            </div>
+            <h4>Educational Resources</h4>
+            <p>Toolkits, guides, and research papers to help activists, policymakers, journalists, and citizens understand AI's impact on fundamental rights.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why It Matters Section -->
+  <section class="section matters-section" aria-labelledby="why-matters-heading">
+    <div class="container">
+      <h2 id="why-matters-heading" class="section-title">Why It Matters</h2>
+      <div class="row align-items-center">
+        <div class="col-lg-7">
+          <p class="lead mb-4">Artificial intelligence is reshaping societies at an unprecedented pace. Without vigilant oversight, AI systems can entrench discrimination, enable mass surveillance, and erode the freedoms we hold dear.</p>
+          <p class="mb-4" style="opacity: 0.9;">From predictive policing algorithms that disproportionately target marginalized communities to automated welfare systems that deny benefits without explanation—the stakes are real and urgent. Human rights frameworks, developed over decades, must now be applied to technologies that their drafters never imagined.</p>
+          <p style="opacity: 0.9;">The AI and Human Rights Hub exists to ensure that as AI advances, human rights don't retreat. We provide the documentation, analysis, and advocacy needed to hold governments and corporations accountable.</p>
+        </div>
+        <div class="col-lg-5 mt-4 mt-lg-0">
+          <div class="row">
+            <div class="col-6">
+              <div class="stat-item">
+                <div class="stat-number">85%</div>
+                <div class="stat-label">of countries now use AI in public services</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="stat-item">
+                <div class="stat-number">3B+</div>
+                <div class="stat-label">people subject to facial recognition systems</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="stat-item">
+                <div class="stat-number">150+</div>
+                <div class="stat-label">documented AI human rights cases</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="stat-item">
+                <div class="stat-number">40+</div>
+                <div class="stat-label">countries with AI regulation gaps</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Global Coverage Section -->
+  <section class="section" aria-labelledby="coverage-heading">
+    <div class="container">
+      <h2 id="coverage-heading" class="section-title">Global Coverage & Credibility</h2>
+      <p class="text-muted mb-4">Our research spans continents and legal systems, drawing on partnerships with leading institutions and experts worldwide.</p>
+      
+      <div class="mb-4">
+        <span class="coverage-badge">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Europe
+        </span>
+        <span class="coverage-badge">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          North America
+        </span>
+        <span class="coverage-badge">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Asia Pacific
+        </span>
+        <span class="coverage-badge">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Africa
+        </span>
+        <span class="coverage-badge">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Latin America
+        </span>
+        <span class="coverage-badge">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Middle East
+        </span>
+      </div>
+
+      <h3 class="h5 mt-5 mb-4" style="font-family: 'Inter', sans-serif; color: var(--primary-dark);">Trusted by Researchers & Advocates Worldwide</h3>
+      <p class="text-muted">Our work is cited by human rights organizations, policymakers, journalists, and academic institutions globally as a trusted source for AI human rights documentation.</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer role="contentinfo">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 mb-4 mb-lg-0">
+          <div class="footer-brand mb-3">AI <span>&</span> Human Rights Hub</div>
+          <p class="small">Monitoring AI's impact on human rights worldwide. Independent. Rigorous. Rights-focused.</p>
+        </div>
+        <div class="col-6 col-lg-2">
+          <h6 class="text-white mb-3">Navigation</h6>
+          <ul class="list-unstyled small">
+            <li class="mb-2"><a href="#">Home</a></li>
+            <li class="mb-2"><a href="#">About</a></li>
+            <li class="mb-2"><a href="#">Case Studies</a></li>
+            <li class="mb-2"><a href="#">Resources</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-lg-2">
+          <h6 class="text-white mb-3">Topics</h6>
+          <ul class="list-unstyled small">
+            <li class="mb-2"><a href="#">Surveillance</a></li>
+            <li class="mb-2"><a href="#">Algorithmic Bias</a></li>
+            <li class="mb-2"><a href="#">Child Safety</a></li>
+            <li class="mb-2"><a href="#">Public Services</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-4 mt-4 mt-lg-0">
+          <h6 class="text-white mb-3">Stay Informed</h6>
+          <p class="small">Subscribe to our newsletter for updates on AI and human rights developments.</p>
+          <div class="input-group">
+            <input type="email" class="form-control form-control-sm" placeholder="Your email" aria-label="Email for newsletter">
+            <button class="btn btn-warning btn-sm" type="button">Subscribe</button>
+          </div>
+        </div>
+      </div>
+      <hr class="my-4" style="border-color: rgba(255,255,255,0.1);">
+      <p class="text-center small mb-0">&copy; 2024 AI and Human Rights Hub. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

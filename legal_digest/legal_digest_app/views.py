@@ -21,6 +21,15 @@ def index(request):
     return render(request, 'index.html', context)
 
 
+def about(request):
+    """About page describing the AI and Human Rights Hub mission."""
+    published_count = Case.objects.exclude(status=Case.STATUS_DRAFT).count()
+    context = {
+        'published_count': published_count,
+    }
+    return render(request, 'about.html', context)
+
+
 def public_cases_list(request):
     """Public page showing all published case summaries."""
     # Only show non-draft cases to the public
@@ -97,8 +106,9 @@ def dashboard(request):
                 Q(title__icontains=search) |
                 Q(citation__icontains=search) |
                 Q(docket_number__icontains=search) |
-                Q(parties__icontains=search)
-            )
+                Q(parties__icontains=search) |
+                Q(tags__name__icontains=search)
+            ).distinct()
         
         court = filter_form.cleaned_data.get('court')
         if court:
@@ -210,3 +220,80 @@ def case_delete(request, slug):
 def logout_view(request):
     logout(request)
     return redirect('login')
+
+
+@login_required
+def tag_list(request):
+    """List all tags with case counts."""
+    tags = Tag.objects.all().order_by('name')
+    tag_stats = []
+    for tag in tags:
+        tag_stats.append({
+            'tag': tag,
+            'case_count': tag.cases.count(),
+            'published_count': tag.cases.exclude(status=Case.STATUS_DRAFT).count()
+        })
+    
+    context = {
+        'tag_stats': tag_stats,
+    }
+    return render(request, 'tag_list.html', context)
+
+
+@login_required
+def tag_create(request):
+    """Create a new tag."""
+    if request.method == 'POST':
+        name = request.POST.get('name', '').strip()
+        if name:
+            if Tag.objects.filter(name__iexact=name).exists():
+                messages.error(request, f'Tag "{name}" already exists.')
+            else:
+                Tag.objects.create(name=name)
+                messages.success(request, f'Tag "{name}" created successfully.')
+                return redirect('legal_digest_app:tag_list')
+        else:
+            messages.error(request, 'Tag name cannot be empty.')
+    
+    return render(request, 'tag_form.html')
+
+
+@login_required
+def tag_edit(request, slug):
+    """Edit an existing tag."""
+    tag = get_object_or_404(Tag, slug=slug)
+    
+    if request.method == 'POST':
+        name = request.POST.get('name', '').strip()
+        if name:
+            if Tag.objects.filter(name__iexact=name).exclude(id=tag.id).exists():
+                messages.error(request, f'Tag "{name}" already exists.')
+            else:
+                tag.name = name
+                tag.slug = ''  # Reset slug to regenerate from new name
+                tag.save()
+                messages.success(request, 'Tag updated successfully.')
+                return redirect('legal_digest_app:tag_list')
+        else:
+            messages.error(request, 'Tag name cannot be empty.')
+    
+    context = {'tag': tag}
+    return render(request, 'tag_form.html', context)
+
+
+@login_required
+def tag_delete(request, slug):
+    """Delete a tag."""
+    tag = get_object_or_404(Tag, slug=slug)
+    
+    if request.method == 'POST':
+        tag_name = tag.name
+        tag.delete()
+        messages.success(request, f'Tag "{tag_name}" deleted successfully.')
+        return redirect('legal_digest_app:tag_list')
+    
+    context = {
+        'tag': tag,
+        'case_count': tag.cases.count()
+    }
+    return render(request, 'tag_confirm_delete.html', context)
